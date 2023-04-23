@@ -1,0 +1,15 @@
+<<<<<<< HEAD
+test/
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+venv/
+logs/
+plugins/
+__pycache__
+=======
+.idea
+
+# project files
+hidden
+>>>>>>> 43a384cc06a2792efb53c5c2e2b1b34b63aac3e9
