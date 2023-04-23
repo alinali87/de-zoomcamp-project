@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Data Engineering Zoomcamp Project
 This is my project for the [Data Engineering Zoomcamp](https://github.com/DataTalksClub/data-engineering-zoomcamp) by [DataTalks.Club](https://datatalks.club/)
 
