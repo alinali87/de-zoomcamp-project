@@ -2,8 +2,6 @@
 # Data Engineering Zoomcamp Project
 This is my project for the [Data Engineering Zoomcamp](https://github.com/DataTalksClub/data-engineering-zoomcamp) by [DataTalks.Club](https://datatalks.club/)
 
-Check my personal repository [here](https://github.com/Isaac-Tolu/data-engineering-zoomcamp)
-
 ## Index
 - [Data Engineering Zoomcamp Project](#data-engineering-zoomcamp-project)
     - [Index](#index)
@@ -132,17 +130,6 @@ Before installing packages on the VM, an SSH key has to be created to connect to
     ssh -i <path-to-private-key> <USER>@<External IP>
     ```
     - This should connect you to the VM
-7. You can also create a config file in your local `~/.ssh/` directory. This would make it easier to log in to the VM. Here is an example below:
-    ```bash
-    Host dezp  # Can be any name of your choosing
-        HostName <External IP>
-        User <username>
-        IdentityFile <absolute-path-to-private-key>
-    ```
-    - You can now connect to your VM from your home directory by running
-        ```bash
-        ssh dezp
-        ```
 8. When you're through with using the VM, you should always shut it down. You can do this either on the GCP dashboard or on your terminal
     ```bash
     sudo shutdown now
@@ -210,7 +197,7 @@ The JSON credentials downloaded is on your local machine. We would transfer it t
 1. On your local machine, navigate to the location of the credentials file `${HOME}/.google/google_credentials.json`
 2. Connect to your VM with **SFTP** using the host name you created  in your config file
     ```bash
-    sftp dezp
+    sftp -i <path-to-private-key> <USER>@<External IP>
     ```
 3. Once connected to your VM through sftp, create the same folder on your VM `${HOME}/.google/credentials/`
 4. Navigate to this folder and run
@@ -220,7 +207,7 @@ The JSON credentials downloaded is on your local machine. We would transfer it t
 5. Log out of sftp and log in to your VM. Confirm that the file is there
 6. For convenience, add this line to the end of the `.bashrc` file
     ```bash
-    export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/.google/google_credentials.json
+    export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/.google/credentials/google_credentials.json
     ```
     - Refresh with `source .bashrc`
 7. Use the service account credentials file for authentication
@@ -241,7 +228,7 @@ Now, you can use VSCode completely to run this project.
 
 #### Clone the repository
 ```bash
-    git clone https://github.com/Isaac-Tolu/dezoomcamp-project.git
+    git clone https://github.com/alinali87/de-zoomcamp-project.git
 ```
 #### Create remaining infrastructure with Terraform
 We use Terraform to create a GCS bucket, a BQ table, and 2 BQ tables
@@ -325,6 +312,3 @@ You are already signed into Airflow. Now it's time to run the pipeline
 I'd like to thank the organisers of this wonderful course. It has given me valuable insights into the field of Data Engineering. Also, all fellow students who took time to answer my questions on the Slack channel, thank you very much.
 
 <p align="right"><a href="#index">back to index</a></p>
-=======
-# de-zoomcamp-project
->>>>>>> 43a384cc06a2792efb53c5c2e2b1b34b63aac3e9
