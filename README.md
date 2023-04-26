@@ -35,16 +35,17 @@ This is my project for the [Data Engineering Zoomcamp](https://github.com/DataTa
     - [Acknowledgements](#acknowledgements)
 
 ## Problem Statement
-- `DevTrack`, a developer-productivity company wants to create a new product for the developer community. 
-- You have been hired to give insights on Github developer activity for April 2022.
-- Here are some of your proposed end-goal questions:
-    - On which day of the month was Github most active?
-    - On which weekday is Github most active?
-    - The most active day and weekday filtered by event?
+- You would like to research GitHub activity to find out some trends. 
+- You have data about GitHub events for April 2023.
+- Here are some questions that you want to answer:
+    - How many events happen on GitHub daily?
+    - What is the most popular type of event?
+    - What are the top 10 most active repos?
+
 ## About the Dataset
 [Github Archive](https://www.gharchive.org/) is a project to record the public Github timeline, archive it, and make it accessible for further analysis.
 ## Architecture
-![architecture](./images/dezp-arc.png)
+![architecture](./images/dezp-arc.png)  # TODO
 
 <p align="right"><a href="#index">back to index</a></p>
 
