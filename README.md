@@ -254,9 +254,9 @@ We use Terraform to create a GCS bucket, a BQ table, and 2 BQ tables
 #### Copy PySpark file to Google Cloud Storage
 1. When creating the DataProc cluster, a temporary GCS bucket was created for that cluster. The pyspark [file](./dataproc/spark_job.py) makes use of that temporary bucket.
     - Copy the name of the bucket from the cloud console
-        ![gcs-temp-bucket](./images/temp-bucket.jpg)
+        ![temp-bucket](./images/temp-bucket.png)
     - Replace it in the pyspark file
-        ![spark-temp-bucket](./images/spark-job-update.png)
+        ![spark-job-update](./images/spark-job-update.png)
 2. Copy file to GCS with `gsutil`
     - On the terminal, nagivate to the `dataproc` directory
     - Then run this command:
@@ -277,7 +277,7 @@ Airflow is run in a docker container. This section contains steps on initisialin
     docker-compose build
     ```
 4. The names of some project resources are hardcoded in the [docker_compose.yaml](./airflow/docker-compose.yaml) file. Change this values to suit your use-case
-    ![hardcoded-values](./images/docker-compose-change.png)
+    ![docker-compose-change](./images/docker-compose-change.png)
 5. Initialise Airflow resources
     ```bash
     docker-compose up airflow-init
@@ -297,7 +297,7 @@ Airflow is run in a docker container. This section contains steps on initisialin
 You are already signed into Airflow. Now it's time to run the pipeline
 1. Click on the DAG `gharchive_dag` that you see there
 2. You should see a tree-like structure of the DAG you're about to run
-    ![tree-dag](./images/dag-tree.png)  # TODO
+    ![dag-tree](./images/dag-tree.png)  # TODO
 3. At the top right-hand corner, trigger the DAG. Make sure _Auto-refresh_ is turned on before doing this
     > The DAG would run from April 1 at 8:00am UTC till 8:00am UTC of the present day  
     > This should take a while
