@@ -23,6 +23,7 @@ GCS_PATH_TEMPLATE = "raw/gh_archive/" + \
     "{{ execution_date.strftime('%Y-%m-%d') }}.json.gz"
 PYSPARK_JOB = f"{AIRFLOW_HOME}/dataproc/spark_job.py"
 
+
 def upload_to_gcs(bucket_name, source_file_name, destination_blob_name):
     """
     Ref: 
@@ -69,7 +70,7 @@ with DAG(
     upload_task = PythonOperator(
         task_id="upload_to_gcs",
         python_callable=upload_to_gcs,
-        op_kwargs = {
+        op_kwargs={
             "bucket_name": BUCKET_NAME,
             "source_file_name": OUTPUT_FILE_TEMPLATE,
             "destination_blob_name": GCS_PATH_TEMPLATE,
@@ -89,7 +90,7 @@ with DAG(
         gcp_conn_id="google_cloud_default",
         region=f"{REGION}",
         main="gs://gharchive_bucket_de-project-383709/dataproc/spark_job.py",
-        arguments = [
+        arguments=[
             "--input_file", f"gs://gharchive_bucket_de-project-383709/{GCS_PATH_TEMPLATE}",
             "--general_activity", f"{DATASET_NAME}.general_activity",
             "--active_users", f"{DATASET_NAME}.active_users"
