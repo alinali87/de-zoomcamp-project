@@ -307,7 +307,7 @@ You are already signed into Airflow. Now it's time to run the pipeline
 
 <p align="right"><a href="#index">back to index</a></p>
 
-## Notable Notes
+## Notes
 - Partitioning and Clustering is pre-defined on the tables in the data warehouse. You can check the definition in the main terraform [file](./terraform/main.tf)
 
 ## Acknowledgements
