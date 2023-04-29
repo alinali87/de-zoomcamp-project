@@ -6,20 +6,20 @@ from airflow.providers.google.cloud.transfers.local_to_gcs import LocalFilesyste
 from airflow.contrib.operators.dataproc_operator import DataProcPySparkOperator
 
 
-AIRFLOW_HOME = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
+AIRFLOW_HOME = os.environ.get("AIRFLOW_HOME", "/opt/airflow")
 PROJECT_ID = os.environ.get("GCP_PROJECT_ID")
 REGION = os.environ.get("GCP_REGION")
 BUCKET_NAME = os.environ.get("GCP_GCS_BUCKET")
 CLUSTER_NAME = os.environ.get("GCP_DATAPROC_CLUSTER_NAME")
 DATASET_NAME = os.environ.get("GCP_BIGQUERY_DATASET_NAME")
 
-URL_TEMPLATE = "https://data.gharchive.org/" + "{{ execution_date.strftime('%Y-%m-%d') }}-{0..23}.json.gz"
+URL_TEMPLATE = "https://data.gharchive.org" + "/{{ execution_date.strftime('%Y-%m-%d') }}-{0..23}.json.gz"
 OUTPUT_FILE_TEMPLATE = AIRFLOW_HOME + "/output-{{ execution_date.strftime('%Y-%m-%d') }}.json.gz"
 GCS_PATH_TEMPLATE = "raw/gh_archive/" + \
     "{{ execution_date.strftime('%Y') }}/" + \
     "{{ execution_date.strftime('%Y-%m') }}/" + \
     "{{ execution_date.strftime('%Y-%m-%d') }}.json.gz"
-PYSPARK_JOB = f"{AIRFLOW_HOME}/dataproc/spark_job.py"
+SPARK_JOB_PATH = "dataproc/spark_job.py"
 
 default_args = {
     "owner": "airflow",
@@ -54,6 +54,13 @@ with DAG(
         bash_command=f"rm {OUTPUT_FILE_TEMPLATE}"
     )
 
+    copy_spark_job_task = LocalFilesystemToGCSOperator(
+        task_id="spark_job_to_gcs",
+        src=f"{AIRFLOW_HOME}/{SPARK_JOB_PATH}",
+        dst=SPARK_JOB_PATH,
+        bucket=BUCKET_NAME,
+    )
+
     processing_task = DataProcPySparkOperator(
         task_id="batch_processing_with_dataproc",
         job_name="pyspark_job_{{ execution_date.strftime('%Y-%m-%d') }}",
@@ -61,7 +68,7 @@ with DAG(
         dataproc_jars=["gs://spark-lib/bigquery/spark-bigquery-latest_2.12.jar"],
         gcp_conn_id="google_cloud_default",
         region=f"{REGION}",
-        main=f"gs://{BUCKET_NAME}/dataproc/spark_job.py",
+        main=f"gs://{BUCKET_NAME}/{SPARK_JOB_PATH}",
         arguments=[
             "--input_file", f"gs://{BUCKET_NAME}/{GCS_PATH_TEMPLATE}",
             "--general_activity", f"{DATASET_NAME}.general_activity",
@@ -69,4 +76,4 @@ with DAG(
         ]
     )
 
-    download_task >> upload_task >> delete_task >> processing_task
+    download_task >> upload_task >> delete_task >> copy_spark_job_task >> processing_task
