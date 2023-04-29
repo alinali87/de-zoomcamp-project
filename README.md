@@ -264,7 +264,7 @@ We use Terraform to create a GCS bucket, a BQ table, and 2 BQ tables
         gsutil cp spark_job.py gs://<gcs-bucket-name>/dataproc/spark_job.py
         ```
         > `gcs-bucket-name` is the name of the bucket you created with terraform
-3. Go to the cloud console and confirm that the folder is there
+3. Go to the cloud console and confirm that the file is there
 #### Initialise Airflow
 Airflow is run in a docker container. This section contains steps on initisialing Airflow resources
 1. Navigate to the [airflow](./airflow/) folder
