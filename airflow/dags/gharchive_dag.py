@@ -53,7 +53,7 @@ default_args = {
     "retries": 1,
 }
 with DAG(
-    dag_id="gharchive_dag",
+    dag_id="test_gharchive_dag",  # TODO: "gharchive_dag"
     description="Pipeline for Data Engineering Zoomcamp Project",
     default_args=default_args,
     schedule_interval="0 8 * * *",
