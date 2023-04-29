@@ -4,7 +4,7 @@ from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.providers.google.cloud.transfers.local_to_gcs import LocalFilesystemToGCSOperator
 from airflow.contrib.operators.dataproc_operator import DataProcPySparkOperator
-from google.cloud import storage
+
 
 AIRFLOW_HOME = os.environ.get("AIRFLOW_HOME", "/opt/airflow/")
 PROJECT_ID = os.environ.get("GCP_PROJECT_ID")
@@ -14,8 +14,7 @@ CLUSTER_NAME = os.environ.get("GCP_DATAPROC_CLUSTER_NAME")
 DATASET_NAME = os.environ.get("GCP_BIGQUERY_DATASET_NAME")
 
 URL_TEMPLATE = "https://data.gharchive.org/" + "{{ execution_date.strftime('%Y-%m-%d') }}-{0..23}.json.gz"
-OUTPUT_FILE_TEMPLATE = AIRFLOW_HOME + \
-    "/output-{{ execution_date.strftime('%Y-%m-%d') }}.json.gz"
+OUTPUT_FILE_TEMPLATE = AIRFLOW_HOME + "/output-{{ execution_date.strftime('%Y-%m-%d') }}.json.gz"
 GCS_PATH_TEMPLATE = "raw/gh_archive/" + \
     "{{ execution_date.strftime('%Y') }}/" + \
     "{{ execution_date.strftime('%Y-%m') }}/" + \
