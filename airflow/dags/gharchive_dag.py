@@ -89,9 +89,9 @@ with DAG(
         dataproc_jars=["gs://spark-lib/bigquery/spark-bigquery-latest_2.12.jar"],
         gcp_conn_id="google_cloud_default",
         region=f"{REGION}",
-        main="gs://gharchive_bucket_de-project-383709/dataproc/spark_job.py",
+        main=f"gs://{BUCKET_NAME}/dataproc/spark_job.py",
         arguments=[
-            "--input_file", f"gs://gharchive_bucket_de-project-383709/{GCS_PATH_TEMPLATE}",
+            "--input_file", f"gs://{BUCKET_NAME}/{GCS_PATH_TEMPLATE}",
             "--general_activity", f"{DATASET_NAME}.general_activity",
             "--active_users", f"{DATASET_NAME}.active_users"
         ]
