@@ -17,7 +17,8 @@ URL_TEMPLATE = "https://data.gharchive.org" + "/{{ execution_date.strftime('%Y-%
 OUTPUT_FILE_TEMPLATE = AIRFLOW_HOME + "/output-{{ execution_date.strftime('%Y-%m-%d') }}.json.gz"
 GCS_PATH_TEMPLATE = "raw/gh_archive/" + \
     "{{ execution_date.strftime('%Y') }}/" + \
-    "{{ execution_date.strftime('%Y-%m') }}/" + \
+    "{{ execution_date.strftime('%m') }}/" + \
+    "{{ execution_date.strftime('%d') }}/" + \
     "{{ execution_date.strftime('%Y-%m-%d') }}.json.gz"
 SPARK_JOB_PATH = "dataproc/spark_job.py"
 
