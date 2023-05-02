@@ -198,24 +198,19 @@ If you are not using a VM, check this [link](https://cloud.google.com/sdk/docs/i
     ```
 4. Terraform is already installed. Test it with `terraform -v`
 ##### Google Application Credentials
-The JSON credentials downloaded is on your local machine. We would transfer it to the VM with an `SFTP` client
+The JSON credentials downloaded is on your local machine. We are going to transfer it to the VM using `scp`
 1. On your local machine, navigate to the location of the credentials file `${HOME}/.google/google_credentials.json`
-2. Connect to your VM with **SFTP** using the host name you created  in your config file
-    ```bash
-    sftp -i <path-to-private-key> <USER>@<External IP>
+2. Copy credentials file to vm 
+    ```scp google_credentials.json <you vm user>@<vm external IP>:/home/<your vm user>/.google/credentials/google_credentials.json
     ```
-3. Once connected to your VM through sftp, create the same folder on your VM `${HOME}/.google/credentials/`
-4. Navigate to this folder and run
-    ```bash
-    put google_credentials.json
-    ```
-5. Log out of sftp and log in to your VM. Confirm that the file is there
-6. For convenience, add this line to the end of the `.bashrc` file
+    
+3. Connect to your vm using ssh `ssh -i /path/to/private/ssh/key <your vm user>@<vm external IP>` and check, that the file is there `ls ~/.google/credentials`
+4. For convenience, add this line to the end of the `.bashrc` file
     ```bash
     export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/.google/credentials/google_credentials.json
     ```
     - Refresh with `source .bashrc`
-7. Use the service account credentials file for authentication
+5. Use the service account credentials file for authentication
     ```bash
     gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
     ```
