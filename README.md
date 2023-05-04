@@ -65,6 +65,7 @@ This is my project for the [Data Engineering Zoomcamp](https://github.com/DataTa
 - A dashboard is created from the BigQuery tables
 - Cloud resources (Storage bucket, BigQuery tables) are created with Terraform
 - Extract & load scripts and PySpark Job are orchestrated with Airflow
+- Dataproc cluster is created with Airflow and is deleted after the job completes
 ## Dashboard
 Dashboard is build in Looker Studio and publicly available on this [link](https://lookerstudio.google.com/s/nLd0g4D8ap4)
 
@@ -93,11 +94,12 @@ In case dashboard is not accessible there is an image below:
 5. You would need to enable this APIs if you have not done already
     - [IAM API](https://console.cloud.google.com/apis/library/iam.googleapis.com)
     - [IAM Service Account Credentials API](https://console.cloud.google.com/apis/library/iamcredentials.googleapis.com)
+    - [Cloud Dataproc API](https://console.cloud.google.com/apis/library/dataproc.googleapis.com)
 
 <p align="right"><a href="#index">back to index</a></p>
 
 #### Pre-Infrastructure Setup
-Terraform is used to setup most of the infrastructure but the Virtual Machine and DataProc Cluster used for this project was created on the cloud console. This aspect contain steps to setup this aspect of this project.
+Terraform is used to setup most of the infrastructure but the Virtual Machine was created on the cloud console. Follow the instructions below to create a VM.
 > You can also use your local machine to reproduce this project but it is much better to use a VM. If you still choose to use your local machine, install the necessary packages on your local machine.
 
 ##### Setting up a Virtual Machine on GCP
@@ -110,14 +112,6 @@ Terraform is used to setup most of the infrastructure but the Virtual Machine an
     - In the Boot disk section, change it to _Ubuntu_ preferably _Ubuntu 20.04 LTS_. A disk size of 30GB is also enough.
     - Leave all other settings on default value and click _Create_
 > You would need to enable the [Compute Engine API](https://console.cloud.google.com/apis/library/compute.googleapis.com) if you have not already.
-##### Setting up a DataProc Cluster on GCP
-1. On the project dashboard, go to _DataProc > Clusters_
-2. Create a new cluster
-    - Use any name of your choice
-    > I used **de-cluster** for my project
-    - For Cluster Type, use _Standard (1 master, N workers)_
-    - Leave other options on default and click _Create_
-> You would need to enable the [Cloud Dataproc API](https://console.cloud.google.com/apis/library/dataproc.googleapis.com) if you have not already.
 
 <p align="right"><a href="#index">back to index</a></p>
 
@@ -247,20 +241,7 @@ We use Terraform to create a GCS bucket, a BQ dataset, and 2 BQ tables
     terraform apply
     ```
 5. Confirm that the infrastructure has been created on the GCP dashboard
-#### Copy PySpark file to Google Cloud Storage
-1. When creating the DataProc cluster, a temporary GCS bucket was created for that cluster. The pyspark [file](./dataproc/spark_job.py) makes use of that temporary bucket.
-    - Copy the name of the bucket from the cloud console
-        ![temp-bucket](./images/temp-bucket.png)
-    - Replace it in the pyspark file
-        ![spark-job-update](./images/spark-job-update.png)
-2. Copy file to GCS with `gsutil`
-    - On the terminal, nagivate to the `dataproc` directory
-    - Then run this command:
-        ```bash
-        gsutil cp spark_job.py gs://<gcs-bucket-name>/dataproc/spark_job.py
-        ```
-        > `gcs-bucket-name` is the name of the bucket you created with terraform
-3. Go to the cloud console and confirm that the file is there
+
 #### Initialise Airflow
 Airflow is run in a docker container. This section contains steps on initisialing Airflow resources
 1. Navigate to the [airflow](./airflow/) folder
@@ -293,6 +274,7 @@ Airflow is run in a docker container. This section contains steps on initisialin
 You are already signed into Airflow. Now it's time to run the pipeline
 1. Click on the DAG `gharchive_dag` that you see there
 2. You should see a tree-like structure of the DAG you're about to run
+![airflow-dag](./images/airflow.png)
 3. At the top right-hand corner, trigger the DAG. Make sure _Auto-refresh_ is turned on before doing this
     > The DAG would run from April 1 at 8:00am UTC till 8:00am UTC of the present day  
     > This should take a while
@@ -305,6 +287,7 @@ You are already signed into Airflow. Now it's time to run the pipeline
 
 ## Notes
 - Partitioning and Clustering is pre-defined on the tables in the data warehouse. You can check the definition in the main terraform [file](./terraform/main.tf)
+- Dataproc configuration is in the gharchive_dag.py file.
 
 ## Acknowledgements
 I'd like to thank the organisers of this wonderful course. It has given me valuable insights into the field of Data Engineering. Also, all fellow students who took time to answer my questions on the Slack channel, thank you very much.
