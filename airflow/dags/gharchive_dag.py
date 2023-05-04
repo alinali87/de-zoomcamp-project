@@ -100,7 +100,8 @@ with DAG(
         arguments=[
             "--input_file", f"gs://{BUCKET_NAME}/{GCS_PATH_TEMPLATE}",
             "--general_activity", f"{DATASET_NAME}.general_activity",
-            "--active_users", f"{DATASET_NAME}.active_users"
+            "--active_users", f"{DATASET_NAME}.active_users",
+            "--gcs_bucket", BUCKET_NAME,
         ]
     )
 

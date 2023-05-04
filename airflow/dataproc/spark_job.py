@@ -9,19 +9,22 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--input_file', required=True)
 parser.add_argument('--general_activity', required=True)
 parser.add_argument('--active_users', required=True)
+parser.add_argument('--gcs_bucket', required=True)
 
 args = parser.parse_args()
 
 input_file = args.input_file
 general_activity = args.general_activity
 active_users = args.active_users
+gcs_bucket = args.gcs_bucket
 
 spark = SparkSession.builder \
     .appName('test') \
     .getOrCreate()
 
 # Change the temporary bucket name to suit your use-case
-spark.conf.set('temporaryGcsBucket', 'dataproc-temp-europe-central2-835252375944-luwzpdyu')
+# spark.conf.set('temporaryGcsBucket', 'dataproc-temp-europe-central2-835252375944-luwzpdyu')
+spark.conf.set('temporaryGcsBucket', gcs_bucket)
 
 schema = types.StructType([
     types.StructField('actor',types.StructType([
