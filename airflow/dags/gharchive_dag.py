@@ -4,6 +4,10 @@ from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.providers.google.cloud.transfers.local_to_gcs import LocalFilesystemToGCSOperator
 from airflow.contrib.operators.dataproc_operator import DataProcPySparkOperator
+from airflow.providers.google.cloud.operators.dataproc import (
+    DataprocCreateClusterOperator,
+    DataprocDeleteClusterOperator,
+)
 
 
 AIRFLOW_HOME = os.environ.get("AIRFLOW_HOME", "/opt/airflow")
@@ -21,6 +25,21 @@ GCS_PATH_TEMPLATE = "raw/gh_archive/" + \
     "{{ execution_date.strftime('%d') }}/" + \
     "{{ execution_date.strftime('%Y-%m-%d') }}.json.gz"
 SPARK_JOB_PATH = "dataproc/spark_job.py"
+
+
+CLUSTER_CONFIG = {
+    "master_config": {
+        "num_instances": 1,
+        "machine_type_uri": "e2-standard-2",
+        "disk_config": {"boot_disk_type": "pd-standard", "boot_disk_size_gb": 1024},
+    },
+    "worker_config": {
+        "num_instances": 2,
+        "machine_type_uri": "e2-standard-2",
+        "disk_config": {"boot_disk_type": "pd-standard", "boot_disk_size_gb": 1024},
+    },
+}
+
 
 default_args = {
     "owner": "airflow",
@@ -55,6 +74,14 @@ with DAG(
         bash_command=f"rm {OUTPUT_FILE_TEMPLATE}"
     )
 
+    create_cluster_task = DataprocCreateClusterOperator(
+    task_id="create_cluster",
+    project_id=PROJECT_ID,
+    cluster_config=CLUSTER_CONFIG,
+    region=REGION,
+    cluster_name=CLUSTER_NAME,
+    )
+
     copy_spark_job_task = LocalFilesystemToGCSOperator(
         task_id="spark_job_to_gcs",
         src=f"{AIRFLOW_HOME}/{SPARK_JOB_PATH}",
@@ -65,10 +92,10 @@ with DAG(
     processing_task = DataProcPySparkOperator(
         task_id="batch_processing_with_dataproc",
         job_name="pyspark_job_{{ execution_date.strftime('%Y-%m-%d') }}",
-        cluster_name=f"{CLUSTER_NAME}",
+        cluster_name=CLUSTER_NAME,
         dataproc_jars=["gs://spark-lib/bigquery/spark-bigquery-latest_2.12.jar"],
         gcp_conn_id="google_cloud_default",
-        region=f"{REGION}",
+        region=REGION,
         main=f"gs://{BUCKET_NAME}/{SPARK_JOB_PATH}",
         arguments=[
             "--input_file", f"gs://{BUCKET_NAME}/{GCS_PATH_TEMPLATE}",
@@ -77,4 +104,11 @@ with DAG(
         ]
     )
 
-    download_task >> upload_task >> delete_task >> copy_spark_job_task >> processing_task
+    delete_cluster_task = DataprocDeleteClusterOperator(
+        task_id="delete_cluster",
+        project_id=PROJECT_ID,
+        cluster_name=CLUSTER_NAME,
+        region=REGION,
+    )
+
+    download_task >> upload_task >> delete_task >> create_cluster_task >> copy_spark_job_task >> processing_task >> delete_cluster_task
