@@ -232,7 +232,7 @@ Now, you can use VSCode completely to run this project.
     git clone https://github.com/alinali87/de-zoomcamp-project.git
 ```
 #### Create remaining infrastructure with Terraform
-We use Terraform to create a GCS bucket, a BQ table, and 2 BQ tables
+We use Terraform to create a GCS bucket, a BQ dataset, and 2 BQ tables
 1. Navigate to the [terraform](./terraform/) folder
 2. Initialise terraform
     ```bash
