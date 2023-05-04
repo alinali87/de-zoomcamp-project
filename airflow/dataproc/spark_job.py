@@ -4,6 +4,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql import types
 from pyspark.sql import functions as F
 
+
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--input_file', required=True)
@@ -22,8 +23,6 @@ spark = SparkSession.builder \
     .appName('test') \
     .getOrCreate()
 
-# Change the temporary bucket name to suit your use-case
-# spark.conf.set('temporaryGcsBucket', 'dataproc-temp-europe-central2-835252375944-luwzpdyu')
 spark.conf.set('temporaryGcsBucket', gcs_bucket)
 
 schema = types.StructType([
