@@ -59,9 +59,9 @@ x-airflow-common:
     # Change this to align with your project
     GCP_PROJECT_ID: 'de-project-383709'
     GCP_REGION: 'europe-central2'
-    GCP_GCS_BUCKET: 'test_gharchive_de-project-383709'  # TODO: 'gharchive_bucket_de-project-383709'
+    GCP_GCS_BUCKET: 'gharchive_bucket_de-project-383709'
     GCP_DATAPROC_CLUSTER_NAME: 'de-cluster'
-    GCP_BIGQUERY_DATASET_NAME: 'test_gharchive'  # TODO: 'gharchive_dataset'
+    GCP_BIGQUERY_DATASET_NAME: 'gharchive_dataset'
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs

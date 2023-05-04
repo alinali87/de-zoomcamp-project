@@ -48,7 +48,7 @@ default_args = {
 }
 
 with DAG(
-    dag_id="test_gharchive_dag",  # TODO: "gharchive_dag"
+    dag_id="gharchive_dag",
     description="Pipeline for Data Engineering Zoomcamp Project",
     default_args=default_args,
     schedule_interval="0 8 * * *",

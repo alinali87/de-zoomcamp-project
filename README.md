@@ -287,7 +287,7 @@ You are already signed into Airflow. Now it's time to run the pipeline
 
 ## Notes
 - Partitioning and Clustering is pre-defined on the tables in the data warehouse. You can check the definition in the main terraform [file](./terraform/main.tf)
-- Dataproc configuration is in the gharchive_dag.py file.
+- Dataproc configuration is in the [gharchive_dag.py](./airflow/dags/gharchive_dag.py) file.
 
 ## Acknowledgements
 I'd like to thank the organisers of this wonderful course. It has given me valuable insights into the field of Data Engineering. Also, all fellow students who took time to answer my questions on the Slack channel, thank you very much.
