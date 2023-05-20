@@ -120,7 +120,7 @@ Before installing packages on the VM, an SSH key has to be created to connect to
 
 ##### SSH Key Connection
 1. To create the SSH key, check this [guide](https://cloud.google.com/compute/docs/connect/create-ssh-keys)
-2. Copy the public key in the `~/ssh` folder
+2. Copy the public key in the `~/.ssh` folder
 3. On the GCP dashboard, navigate to _Compute Engine > Metadata > SSH KEYS_
 4. Click _Edit_. Then click _Add Item_. Paste the public key and click _Save_
 5. Go to the VM instance you created and copy the _External IP_
